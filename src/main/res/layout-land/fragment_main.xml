@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button_main_cube"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="80"
+        android:textSize="72sp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="20" >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:id="@+id/button_main_stop_watch"
+            android:text="@string/button_main_stop_watch" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:id="@+id/button_main_mortgage_loan_calc"
+            android:text="@string/button_main_mortgage_loan_calc" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:id="@+id/button_main_exchange_rate_calc"
+            android:text="@string/button_main_exchange_rate_calc" />
+
+    </LinearLayout>
+
+</LinearLayout>

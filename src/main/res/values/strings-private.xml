@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exchange_rate_JSON">https://openexchangerates.org/api/latest.json?app_id=INTENTIONALLY_REMOVED</string>
+</resources>

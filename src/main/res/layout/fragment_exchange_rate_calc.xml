@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:gravity="center"
+        android:text="Exchange Rate Calculator"
+        android:textSize="22sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height= "2dp"
+        android:background="#e0e0e0" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:id="@+id/textview_exchange_rate_desc"
+        android:gravity="center_horizontal" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:id="@+id/spinner_exchange_rate_base" >
+
+        </Spinner>
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:id="@+id/spinner_exchange_rate_target" >
+
+        </Spinner>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height= "2dp"
+        android:background="#e0e0e0" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Base Rate: "
+            android:textSize="18sp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edittext_exchange_rate_base_quantity"
+            android:hint="Enter Quantity"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionDone"
+            android:background="#00000000" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height= "2dp"
+        android:background="#e0e0e0" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_exchange_rate_results"
+        android:padding="5dp"
+        android:gravity="center"
+        android:text="Calculation Results"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exchange Value: "
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview_exchange_rate_final_value"
+            android:text="1.000"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

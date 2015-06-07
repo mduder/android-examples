@@ -1,0 +1,32 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity" >
+
+    <item
+        android:id="@+id/action_bar_menu_main"
+        android:title="@string/action_bar_main"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_bar_number_details"
+        android:title="@string/action_bar_number_details"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_bar_stop_watch"
+        android:title="@string/action_bar_stop_watch"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_bar_mortgage_loan"
+        android:title="@string/action_bar_mortgage_loan"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_bar_exchange_rate"
+        android:title="@string/action_bar_exchange_rate"
+        app:showAsAction="never" />
+
+</menu>

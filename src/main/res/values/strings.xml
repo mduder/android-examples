@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Random Task</string>
+
+    <string name="action_bar_main">Home</string>
+    <string name="action_bar_number_details">Number Details</string>
+    <string name="action_bar_stop_watch">Stop Watch</string>
+    <string name="action_bar_mortgage_loan">Mortgage Loan</string>
+    <string name="action_bar_exchange_rate">Exchange Rate</string>
+
+    <string name="fragment_main">mainFragment</string>
+    <string name="fragment_number_details">numberDetailsFragment</string>
+    <string name="fragment_stop_watch">stopWatchFragment</string>
+    <string name="fragment_mortgage_loan_calc">morgageLoanCalcFragment</string>
+    <string name="fragment_exchange_rate_calc">exchangeRateCalcFragment</string>
+
+    <string name="button_main_stop_watch">Stop Watch</string>
+    <string name="button_main_mortgage_loan_calc">Mortgage Loan Calculator</string>
+    <string name="button_main_exchange_rate_calc">Exchange Rate Calculator</string>
+
+    <string name="English_1">1</string>
+    <string name="Tamil_1">௧</string>
+    <string name="Chinese_1">一</string>
+    <string name="Roman_1">I</string>
+    <string name="Devanagari_1">१</string>
+    <string name="Arabic_1">١</string>
+    <string name="Thai_1">๑</string>
+
+    <string name="English_2">2</string>
+    <string name="Tamil_2">௨</string>
+    <string name="Chinese_2">二</string>
+    <string name="Roman_2">II</string>
+    <string name="Devanagari_2">२</string>
+    <string name="Arabic_2">٢</string>
+    <string name="Thai_2">๒</string>
+
+    <string name="English_3">3</string>
+    <string name="Tamil_3">௩</string>
+    <string name="Chinese_3">三</string>
+    <string name="Roman_3">III</string>
+    <string name="Devanagari_3">३</string>
+    <string name="Arabic_3">٣</string>
+    <string name="Thai_3">๓</string>
+
+    <string name="English_4">4</string>
+    <string name="Tamil_4">௪</string>
+    <string name="Chinese_4">四</string>
+    <string name="Roman_4">IV</string>
+    <string name="Devanagari_4">४</string>
+    <string name="Arabic_4">٤</string>
+    <string name="Thai_4">๔</string>
+
+    <string name="English_5">5</string>
+    <string name="Tamil_5">௫</string>
+    <string name="Chinese_5">五</string>
+    <string name="Roman_5">V</string>
+    <string name="Devanagari_5">५</string>
+    <string name="Arabic_5">٥</string>
+    <string name="Thai_5">๕</string>
+
+    <string name="English_6">6</string>
+    <string name="Tamil_6">௬</string>
+    <string name="Chinese_6">六</string>
+    <string name="Roman_6">VI</string>
+    <string name="Devanagari_6">६</string>
+    <string name="Arabic_6">٦</string>
+    <string name="Thai_6">๖</string>
+</resources>
