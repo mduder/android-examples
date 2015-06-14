@@ -71,14 +71,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Annual Percentage Rate: "
+                    android:text="APR: "
                     android:textSize="18sp" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edittext_mortgage_loan_interest_rate"
-                    android:hint="Percentage"
+                    android:hint="Percentage Points"
                     android:inputType="numberDecimal"
                     android:imeOptions="actionDone"
                     android:background="#00000000" />

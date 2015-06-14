@@ -107,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textview_exchange_rate_final_value"
-            android:text="1.000"
+            android:text=""
             android:textSize="18sp" />
 
     </LinearLayout>

@@ -1,8 +1,10 @@
 package net.mduder.examples.random_task;
 
 /**
- * This class used to extend Button.  However, No amount of tweaking could get it to render/draw
- * on a Samsung Note 3 (with Kitkat) so the class now only contains model logic.
+ * This class used to extend the Button fragment.  However, the fragment failed to
+ * display on a Note 3 (running KitKat), even though all render / draw callbacks
+ * succeeded.  Unfortunately, I had to scale this feature back, so this class
+ * now just represents the logical cube / die behavior.
  */
 public class CubeButton {
     enum Direction { LEFT, UP, RIGHT, DOWN }

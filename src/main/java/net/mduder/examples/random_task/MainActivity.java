@@ -3,11 +3,10 @@ package net.mduder.examples.random_task;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 import de.greenrobot.event.EventBus;
 
@@ -16,7 +15,7 @@ import de.greenrobot.event.EventBus;
  * This also handles all EventBus messages, launching new UIs as requested.
  */
 public class MainActivity extends ActionBarActivity {
-    private LinkedHashMap<String, Object> exchangeRateDataCache;
+    private TreeMap<String, Object> exchangeRateDataCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +80,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        exchangeRateDataCache = (LinkedHashMap<String, Object>)savedInstanceState
+        exchangeRateDataCache = (TreeMap<String, Object>)savedInstanceState
                 .getSerializable("exchangeRateDataCache");
     }
 
@@ -200,7 +199,7 @@ public class MainActivity extends ActionBarActivity {
      * First, cache the received exchange rate data.  Then,
      * set this data in requesting fragment, if it still exists.
      */
-    private void setDataExchangeRate(LinkedHashMap<String, Object> exchangeRateData) {
+    private void setDataExchangeRate(TreeMap<String, Object> exchangeRateData) {
         if (exchangeRateDataCache != exchangeRateData) {
             exchangeRateDataCache = exchangeRateData;
         }

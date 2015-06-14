@@ -21,9 +21,10 @@ import de.greenrobot.event.EventBus;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 /**
+ * Exchange Rate Calculator UI Fragment
  * https://openexchangerates.org/documentation
  */
 public class ExchangeRateCalcFragment extends Fragment {
@@ -119,7 +120,6 @@ public class ExchangeRateCalcFragment extends Fragment {
             }
         };
         EditText editText = (EditText)view.findViewById(R.id.edittext_exchange_rate_base_quantity);
-        editText.setText("1.000");
         editText.setOnEditorActionListener(onEditorActionListener);
         editText.addTextChangedListener(new CurrencyTextWatcher(editText));
 
@@ -145,7 +145,11 @@ public class ExchangeRateCalcFragment extends Fragment {
                 EventBusMessage.MessageType.getDataExchangeRate));
     }
 
-    public void setDataExchangeRate (LinkedHashMap<String, Object> dataExchangeRate) {
+    /**
+     * Called from the Main Activity after receiving an EventBus message
+     * from the asynchronous ExchangeRateTask
+     */
+    public void setDataExchangeRate (TreeMap<String, Object> dataExchangeRate) {
         if (dataExchangeRate.get("error") != null) {
             requestState = RequestState.FAILED;
             int errorCode = (int)dataExchangeRate.get("status");
@@ -157,19 +161,16 @@ public class ExchangeRateCalcFragment extends Fragment {
             return;
         }
 
-        LinkedHashMap<String, Object> conversionRates =
-                (LinkedHashMap<String, Object>)dataExchangeRate.get("rates");
-        for (LinkedHashMap.Entry<String, Object> entry : conversionRates.entrySet()) {
+        TreeMap<String, Object> conversionRates =
+                (TreeMap<String, Object>)dataExchangeRate.get("rates");
+        for (TreeMap.Entry<String, Object> entry : conversionRates.entrySet()) {
             Object val = entry.getValue();
             String country = entry.getKey();
-            Double rate;
+            Double rate = 0.0;
             if (val instanceof Integer) {
                 rate = ((Integer)val).doubleValue();
             } else if (val instanceof Double) {
                 rate = (Double)val;
-            } else {
-                Log.d(getClass().getSimpleName(), "unknown type: " + val.getClass().toString());
-                return;
             }
             countryArray.add(country);
             rateArray.add(rate);
@@ -201,43 +202,39 @@ public class ExchangeRateCalcFragment extends Fragment {
     }
 
     private void updateTextFields(View view) {
-        TextView textView;
         String status;
-        String exchangeValue;
+        String exchangeValue = "Not Applicable";
 
         switch (requestState) {
             case NOT_SENT:
                 status = "Initializing";
-                exchangeValue = "Not Applicable";
                 break;
             case PENDING:
                 status = "Retrieving exchange rate data";
-                exchangeValue = "Not Applicable";
                 break;
             case RECEIVED:
                 status = "Select base and target country codes";
-                exchangeValue = "1.000";
                 break;
             case FAILED:
             default:
                 status = "Exchange rate data unavailable";
-                exchangeValue = "Not Applicable";
                 break;
         }
-        textView = (TextView)view.findViewById(R.id.textview_exchange_rate_desc);
-        textView.setText(status);
+
+        ((TextView)view.findViewById(R.id.textview_exchange_rate_desc)).setText(status);
         if (requestState != RequestState.RECEIVED) {
-            textView = (TextView)view.findViewById(R.id.textview_exchange_rate_results);
-            textView.setText(exchangeValue);
+            ((TextView)view.findViewById(R.id.textview_exchange_rate_results))
+                    .setText(exchangeValue);
             return;
         }
 
-        textView = (TextView)view.findViewById(R.id.textview_exchange_rate_results);
-        EditText editText = (EditText)view.findViewById(R.id.edittext_exchange_rate_base_quantity);
-        String multiplierString = editText.getText().toString();
+        TextView textView = (TextView)view.findViewById(R.id.textview_exchange_rate_results);
+        String multiplierString = ((EditText)view.findViewById(
+                R.id.edittext_exchange_rate_base_quantity)).getText().toString();
         if (multiplierString.equals("")) {
             textView.setTextColor(Color.RED);
-            textView.setText("Invalid Base Rate field");
+            textView.setText("Missing Base Rate");
+            ((TextView)view.findViewById(R.id.textview_exchange_rate_final_value)).setText("");
             return;
         }
         textView.setTextColor(defaultTextViewColor);
@@ -246,8 +243,8 @@ public class ExchangeRateCalcFragment extends Fragment {
         Double multiplier = Double.parseDouble(multiplierString);
         Double newRate = rateArray.get(countryArray.indexOf(countryTarget)) /
                 rateArray.get(countryArray.indexOf(countryBase));
-        textView = (TextView)view.findViewById(R.id.textview_exchange_rate_final_value);
-        textView.setText(formatRateResult(multiplier * newRate));
+        ((TextView)view.findViewById(R.id.textview_exchange_rate_final_value))
+                .setText(formatRateResult(multiplier * newRate));
     }
 
     private String formatRateResult (Double exchangeRate) {

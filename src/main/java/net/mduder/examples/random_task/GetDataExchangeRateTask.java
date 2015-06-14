@@ -15,25 +15,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 import de.greenrobot.event.EventBus;
 
 /**
- * Async task will fetch exchange rate data.
+ * Async task will fetch exchange rate data.  This task is fired from the Main Activity
+ * after the user runs the Exchange Rate Calc UI fragment for the first time.
  */
-public class GetDataExchangeRateTask extends AsyncTask<String, Void, LinkedHashMap<String, Object>> {
+public class GetDataExchangeRateTask extends AsyncTask<String, Void, TreeMap<String, Object>> {
     @Override
-    protected LinkedHashMap<String, Object> doInBackground (String... URLs) {
+    protected TreeMap<String, Object> doInBackground(String... URLs) {
         JSONObject results = getLiveData(URLs[0]);
         if (results == null) {
             // Error already logged
             return null;
         }
 
-        LinkedHashMap<String, Object> exchangeRateData;
+        TreeMap<String, Object> exchangeRateData;
         try {
-            exchangeRateData = JsonHelper.toMap(results);
+            exchangeRateData = JsonMapper.toMap(results);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -42,7 +43,7 @@ public class GetDataExchangeRateTask extends AsyncTask<String, Void, LinkedHashM
     }
 
     @Override
-    protected void onPostExecute(LinkedHashMap<String, Object> exchangeRateData) {
+    protected void onPostExecute(TreeMap<String, Object> exchangeRateData) {
         if (exchangeRateData == null) {
             Log.d(getClass().getSimpleName(),
                     "retrieve exchange rate - null JSON Object, data not sent");
@@ -54,17 +55,22 @@ public class GetDataExchangeRateTask extends AsyncTask<String, Void, LinkedHashM
 
     private JSONObject mockDataValid() {
         JSONObject testObject = new JSONObject();
-        LinkedHashMap<String, Double> testRates = new LinkedHashMap<String, Double>();
-        testRates.put("CAD", 1.207784);
-        testRates.put("CNY", 6.187673);
-        testRates.put("INR", 63.80698);
-        testRates.put("JPY", 119.7949);
-        testRates.put("USD", 1.000000);
+        JSONObject testRates = new JSONObject();
 
         try {
+            /**
+             * Add in reverse alphabetical order, to ensure the fragment
+             * processing this result, will properly order the results
+             */
+            testRates.put("USD", 1.000000);
+            testRates.put("JPY", 119.7949);
+            testRates.put("INR", 63.80698);
+            testRates.put("CNY", 6.187673);
+            testRates.put("CAD", 1.207784);
+
+            testObject.put("rates", testRates);
             testObject.put("timestamp", 1431151261);
             testObject.put("base", "USD");
-            testObject.put("rates", testRates);
         } catch (JSONException e) {
             e.printStackTrace();
         }
