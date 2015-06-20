@@ -19,6 +19,7 @@ import java.text.NumberFormat;
 import java.util.HashSet;
 
 /**
+ * This fragment represents the UI for the mortgage loan calculator.
  * Reference: http://www.intmath.com/money-math/3-math-of-house-buying.php
  */
 public class MortgageLoanCalcFragment extends Fragment {
@@ -28,7 +29,7 @@ public class MortgageLoanCalcFragment extends Fragment {
     private double APR;
     private int paymentsRequired;
     private int paymentsMade;
-    private HashSet<TextField> validFields;
+    private HashSet<TextField> invalidFields;
     private ColorStateList defaultTextViewColor;
     private DecimalFormat decimalFormat;
 
@@ -45,9 +46,12 @@ public class MortgageLoanCalcFragment extends Fragment {
             return;
         }
 
-        validFields = new HashSet<>();
         decimalFormat = new DecimalFormat("#.##");
         decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        invalidFields = new HashSet<>();
+        for (TextField field : TextField.values()) {
+            invalidFields.add(field);
+        }
     }
 
     @Override
@@ -55,6 +59,12 @@ public class MortgageLoanCalcFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mortgage_loan_calc, container, false);
 
+        /**
+         * Since the user can modify any number of input fields before sending Done
+         * to the app, all fields must be validated after every pass.  For this reason,
+         * the textView and actionID specific to this event is not accessed via
+         * the method arguments.
+         */
         TextView.OnEditorActionListener onEditorActionListener =
                 new TextView.OnEditorActionListener() {
             @Override
@@ -65,79 +75,66 @@ public class MortgageLoanCalcFragment extends Fragment {
                     return false;
                 }
 
-                String userInput = textView.getText().toString();
-                TextField missingField = null;
-                TextField wrongField = null;
-                TextField validField = null;
-                if (textView.getId() == R.id.edittext_mortgage_loan_principal) {
-                    if (userInput.equals("")) {
-                        missingField = TextField.PRINCIPAL;
-                    } else {
-                        int maybePrincipal = Integer.parseInt(userInput.replaceAll("[$,.]", ""));
-                        if (maybePrincipal <= 0) {
-                            wrongField = TextField.PRINCIPAL;
-                        } else {
-                            principal = maybePrincipal;
-                            validField = TextField.PRINCIPAL;
-                        }
-                    }
-                } else if (textView.getId() == R.id.edittext_mortgage_loan_interest_rate) {
-                    if (userInput.equals("")) {
-                        missingField = TextField.APR;
-                    } else {
-                        double maybeAPR = Double.parseDouble(userInput);
-                        if (maybeAPR <= 0.0) {
-                            wrongField = TextField.APR;
-                        } else {
-                            APR = maybeAPR;
-                            validField = TextField.APR;
-                        }
-                    }
-                } else if (textView.getId() == R.id.edittext_mortgage_loan_payments_required) {
-                    if (userInput.equals("")) {
-                        missingField = TextField.PMT_REQ;
-                    } else {
-                        int maybePaymentsRequired = Integer.parseInt(userInput);
-                        if (maybePaymentsRequired <= 0) {
-                            wrongField = TextField.PMT_REQ;
-                        } else {
-                            paymentsRequired = maybePaymentsRequired;
-                            validField = TextField.PMT_REQ;
-                        }
-                    }
-                } else if (textView.getId() == R.id.edittext_mortgage_loan_payments_made) {
-                    if (userInput.equals("")) {
-                        missingField = TextField.PMT_MADE;
-                    } else {
-                        int maybePaymentsMade = Integer.parseInt(userInput);
-                        if (maybePaymentsMade < 0) {
-                            wrongField = TextField.PMT_MADE;
-                        } else {
-                            paymentsMade = maybePaymentsMade;
-                            validField = TextField.PMT_MADE;
-                        }
-                    }
-                } else {
+                TextField badField = null;
+                String fieldString = "";
+                View globalView = getView();
+                if (globalView == null) {
                     return false;
                 }
 
-                if (validField != null) {
-                    validFields.add(validField);
-                    recalculateValues(getView());
-                } else {
-                    if (wrongField != null) {
-                        validFields.remove(wrongField);
-                    } else {
-                        validFields.remove(missingField);
+                for (TextField field : TextField.values()) {
+                    if (field == TextField.PRINCIPAL) {
+                        fieldString = ((EditText)globalView
+                                .findViewById(R.id.edittext_mortgage_loan_principal))
+                                .getText().toString();
+                        if (!(fieldString.equals(""))) {
+                            principal = Integer.parseInt(fieldString.replaceAll("[$,.]", ""));
+                        }
+                    } else if (field == TextField.APR) {
+                        fieldString = ((EditText)globalView
+                                .findViewById(R.id.edittext_mortgage_loan_interest_rate))
+                                .getText().toString();
+                        if (!(fieldString.equals(""))) {
+                            APR = Double.parseDouble(fieldString);
+                        }
+                    } else if (field == TextField.PMT_REQ) {
+                        fieldString = ((EditText)globalView
+                                .findViewById(R.id.edittext_mortgage_loan_payments_required))
+                                .getText().toString();
+                        if (!(fieldString.equals(""))) {
+                            paymentsRequired = Integer.parseInt(fieldString);
+                        }
+                    } else if (field == TextField.PMT_MADE) {
+                        fieldString = ((EditText)globalView
+                                .findViewById(R.id.edittext_mortgage_loan_payments_made))
+                                .getText().toString();
+                        if (!(fieldString.equals(""))) {
+                            paymentsMade = Integer.parseInt(fieldString);
+                        }
                     }
-                    setLabelsInvalid(getView(), fieldErrorString(wrongField, missingField));
+                    if (!(fieldString.equals(""))) {
+                        invalidFields.remove(field);
+                    } else {
+                        invalidFields.add(field);
+                        badField = field;
+                    }
+                }
+
+                if (badField == null) {
+                    recalculateValues(globalView);
+                } else {
+                    if (invalidFields.size() > 1) {
+                        setLabelsInvalid(globalView, fieldErrorString(null));
+                    } else {
+                        setLabelsInvalid(globalView, fieldErrorString(badField));
+                    }
                 }
                 return false;
             }
         };
 
         EditText editText = (EditText)view.findViewById(R.id.edittext_mortgage_loan_principal);
-        if (validFields.contains(TextField.PRINCIPAL)) {
+        if (!(invalidFields.contains(TextField.PRINCIPAL))) {
             editText.setText(NumberFormat.getCurrencyInstance()
                     .format(principal).replace(".00", ""));
         }
@@ -145,21 +142,21 @@ public class MortgageLoanCalcFragment extends Fragment {
         editText.addTextChangedListener(new DollarTextWatcher(editText));
 
         editText = (EditText)view.findViewById(R.id.edittext_mortgage_loan_interest_rate);
-        if (validFields.contains(TextField.APR)) {
+        if (!(invalidFields.contains(TextField.APR))) {
             editText.setText(String.valueOf(APR));
         }
         editText.setOnEditorActionListener(onEditorActionListener);
         editText.addTextChangedListener(new PercentageTextWatcher(editText));
 
         editText = (EditText)view.findViewById(R.id.edittext_mortgage_loan_payments_required);
-        if (validFields.contains(TextField.PMT_REQ)) {
+        if (!(invalidFields.contains(TextField.PMT_REQ))) {
             editText.setText(String.valueOf(paymentsRequired));
         }
         editText.setOnEditorActionListener(onEditorActionListener);
         editText.addTextChangedListener(new NumericTextWatcher(editText));
 
         editText = (EditText)view.findViewById(R.id.edittext_mortgage_loan_payments_made);
-        if (validFields.contains(TextField.PMT_MADE)) {
+        if (!(invalidFields.contains(TextField.PMT_MADE))) {
             editText.setText(String.valueOf(paymentsMade));
         }
         editText.setOnEditorActionListener(onEditorActionListener);
@@ -190,7 +187,7 @@ public class MortgageLoanCalcFragment extends Fragment {
         final int APR_CONVERSION = 1200;
         if (view == null) {
             return;
-        } else if (validFields.size() < 4) {
+        } else if (invalidFields.size() > 0) {
             setLabelsInvalid(view, "Please provide input for calculation");
             return;
         } else if (paymentsMade > paymentsRequired) {
@@ -261,25 +258,12 @@ public class MortgageLoanCalcFragment extends Fragment {
         textView.setText("");
     }
 
-    private String fieldErrorString(TextField wrongField, TextField missingField) {
+    private String fieldErrorString(TextField missingField) {
         String errorString = "";
 
-        if (wrongField != null) {
-            switch (wrongField) {
-                case PRINCIPAL:
-                    errorString = "Invalid Principal Amount";
-                    break;
-                case APR:
-                    errorString = "Invalid Percentage Rate";
-                    break;
-                case PMT_REQ:
-                    errorString = "Invalid Payments Required Count";
-                    break;
-                case PMT_MADE:
-                    errorString = "Invalid Payments Made Count";
-                    break;
-            }
-        } else if (missingField != null) {
+        if (missingField == null) {
+            errorString = "Please provide input for calculation";
+        } else {
             switch (missingField) {
                 case PRINCIPAL:
                     errorString = "Missing Principal Amount";
